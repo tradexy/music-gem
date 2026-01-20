@@ -1,0 +1,5 @@
+{
+  "name": "Music-Gem Acid Sequencer",
+  "description": "A professional 303-style MIDI and Web Audio step sequencer for generating acid basslines. Features real-time synthesis, hardware MIDI output, and AI pattern generation.",
+  "requestFramePermissions": []
+}
