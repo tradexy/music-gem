@@ -316,71 +316,73 @@ function App() {
           </div>
         </div>
 
-        {/* The Sequencer Grid */}
-        <div className="grid grid-cols-16 gap-1 bg-gray-950 p-2 rounded-lg border border-gray-800 overflow-x-auto">
-          {pattern.map((step, idx) => (
-            <div key={idx} className={`flex flex-col items-center gap-2 py-2 min-w-[3rem] rounded border transition-colors ${currentStep === idx ? 'bg-gray-800 border-yellow-600 shadow-[0_0_10px_rgba(234,179,8,0.2)]' : 'bg-transparent border-transparent'}`}>
+        {/* The Sequencer Grid - Horizontal Scroll on Mobile */}
+        <div className="bg-gray-950 p-2 rounded-lg border border-gray-800 overflow-x-auto">
+          <div className="flex gap-1 min-w-max">
+            {pattern.map((step, idx) => (
+              <div key={idx} className={`flex flex-col items-center gap-2 py-2 min-w-[3rem] rounded border transition-colors ${currentStep === idx ? 'bg-gray-800 border-yellow-600 shadow-[0_0_10px_rgba(234,179,8,0.2)]' : 'bg-transparent border-transparent'}`}>
 
-              {/* LED */}
-              <div className={`w-3 h-3 rounded-full mb-1 transition-all duration-75 ${currentStep === idx ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-red-900/30'}`}></div>
+                {/* LED */}
+                <div className={`w-3 h-3 rounded-full mb-1 transition-all duration-75 ${currentStep === idx ? 'bg-red-500 shadow-[0_0_8px_#ef4444]' : 'bg-red-900/30'}`}></div>
 
-              {/* On/Off Toggle */}
-              <button
-                className={`w-10 h-10 rounded shadow-md border-b-4 transition-all active:border-b-0 active:translate-y-1 ${step.active ? 'bg-yellow-600 border-yellow-800 text-white' : 'bg-gray-700 border-gray-800 text-gray-500 hover:bg-gray-600'}`}
-                onClick={() => updateStep(idx, 'active', !step.active)}
-              >
-                {idx + 1}
-              </button>
-
-              <div className="h-px w-full bg-gray-800 my-1"></div>
-
-              {/* Note Select */}
-              <div className="relative group">
-                <button className="text-xs font-mono font-bold text-blue-300 hover:text-white w-full text-center py-1 bg-gray-900 rounded border border-gray-800">
-                  {NOTES[step.note]}
+                {/* On/Off Toggle */}
+                <button
+                  className={`w-10 h-10 rounded shadow-md border-b-4 transition-all active:border-b-0 active:translate-y-1 ${step.active ? 'bg-yellow-600 border-yellow-800 text-white' : 'bg-gray-700 border-gray-800 text-gray-500 hover:bg-gray-600'}`}
+                  onClick={() => updateStep(idx, 'active', !step.active)}
+                >
+                  {idx + 1}
                 </button>
-                <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block z-50 bg-gray-800 border border-gray-600 rounded shadow-xl p-1 w-24 max-h-48 overflow-y-auto">
-                  {NOTES.map((n, nIdx) => (
-                    <div
-                      key={n}
-                      className="px-2 py-1 text-xs hover:bg-blue-600 cursor-pointer text-gray-200"
-                      onClick={() => updateStep(idx, 'note', nIdx)}
-                    >
-                      {n}
-                    </div>
-                  ))}
+
+                <div className="h-px w-full bg-gray-800 my-1"></div>
+
+                {/* Note Select */}
+                <div className="relative group">
+                  <button className="text-xs font-mono font-bold text-blue-300 hover:text-white w-full text-center py-1 bg-gray-900 rounded border border-gray-800">
+                    {NOTES[step.note]}
+                  </button>
+                  <div className="absolute bottom-full left-0 mb-1 hidden group-hover:block z-50 bg-gray-800 border border-gray-600 rounded shadow-xl p-1 w-24 max-h-48 overflow-y-auto">
+                    {NOTES.map((n, nIdx) => (
+                      <div
+                        key={n}
+                        className="px-2 py-1 text-xs hover:bg-blue-600 cursor-pointer text-gray-200"
+                        onClick={() => updateStep(idx, 'note', nIdx)}
+                      >
+                        {n}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
 
-              {/* Octave */}
-              <div className="flex flex-col w-full px-1 gap-1">
+                {/* Octave */}
+                <div className="flex flex-col w-full px-1 gap-1">
+                  <button
+                    className={`text-[10px] py-0.5 rounded ${step.octave === 1 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-500'}`}
+                    onClick={() => updateStep(idx, 'octave', step.octave === 1 ? 0 : 1)}
+                  >UP</button>
+                  <button
+                    className={`text-[10px] py-0.5 rounded ${step.octave === -1 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-500'}`}
+                    onClick={() => updateStep(idx, 'octave', step.octave === -1 ? 0 : -1)}
+                  >DN</button>
+                </div>
+
+                <div className="h-px w-full bg-gray-800 my-1"></div>
+
+                {/* Modifiers */}
                 <button
-                  className={`text-[10px] py-0.5 rounded ${step.octave === 1 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-500'}`}
-                  onClick={() => updateStep(idx, 'octave', step.octave === 1 ? 0 : 1)}
-                >UP</button>
+                  className={`w-8 h-6 text-[10px] rounded font-bold transition-colors ${step.slide ? 'bg-purple-600 text-white shadow-[0_0_5px_rgba(147,51,234,0.5)]' : 'bg-gray-800 text-gray-600'}`}
+                  onClick={() => updateStep(idx, 'slide', !step.slide)}
+                >
+                  SLD
+                </button>
                 <button
-                  className={`text-[10px] py-0.5 rounded ${step.octave === -1 ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-500'}`}
-                  onClick={() => updateStep(idx, 'octave', step.octave === -1 ? 0 : -1)}
-                >DN</button>
+                  className={`w-8 h-6 text-[10px] rounded font-bold transition-colors ${step.accent ? 'bg-white text-black shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'bg-gray-800 text-gray-600'}`}
+                  onClick={() => updateStep(idx, 'accent', !step.accent)}
+                >
+                  ACC
+                </button>
               </div>
-
-              <div className="h-px w-full bg-gray-800 my-1"></div>
-
-              {/* Modifiers */}
-              <button
-                className={`w-8 h-6 text-[10px] rounded font-bold transition-colors ${step.slide ? 'bg-purple-600 text-white shadow-[0_0_5px_rgba(147,51,234,0.5)]' : 'bg-gray-800 text-gray-600'}`}
-                onClick={() => updateStep(idx, 'slide', !step.slide)}
-              >
-                SLD
-              </button>
-              <button
-                className={`w-8 h-6 text-[10px] rounded font-bold transition-colors ${step.accent ? 'bg-white text-black shadow-[0_0_5px_rgba(255,255,255,0.5)]' : 'bg-gray-800 text-gray-600'}`}
-                onClick={() => updateStep(idx, 'accent', !step.accent)}
-              >
-                ACC
-              </button>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 
